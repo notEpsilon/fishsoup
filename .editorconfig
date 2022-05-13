@@ -1,0 +1,4 @@
+root = true
+
+[src/**.{vue,js,ts,jsx,tsx}]
+indent_size = 4
