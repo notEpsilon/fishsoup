@@ -2,7 +2,7 @@
   <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
       <div>
-        <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow" />
+        <img class="mx-auto h-12 w-auto" src="@/assets/logo.svg" alt="Fishsoup" />
         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
         <p class="mt-2 text-center text-sm text-gray-600">
           Or
@@ -24,18 +24,6 @@
           </div>
           <span v-if="Object.keys(errors).length !== 0 && errors.password && errors.password.length !== 0" class="text-red-500">{{ errors.password[0] }}</span>
         </div>
-
-        <!-- <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" />
-            <label for="remember-me" class="ml-2 block text-sm text-gray-900"> Remember me </label>
-          </div>
-
-          <div class="text-sm">
-            <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"> Forgot your password? </a>
-          </div>
-        </div> -->
-
         <div>
           <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             <span class="absolute left-0 inset-y-0 flex items-center pl-3">
@@ -56,6 +44,8 @@
     import User from "@/api/user";
     import router from "@/router/index";
     import type IUser from "@/types/User"
+    import { useAuthState } from "@/stores/auth-state";
+    import { storeToRefs } from "pinia";
     export default defineComponent({
         name: 'LoginComponent',
         components: {
@@ -68,10 +58,14 @@
           });
           let errors = ref<Record<string, string[]>>({});
           let currentUser = ref<IUser>();
+          const authState = useAuthState();
+          const { loggedIn } = storeToRefs(authState);
           return {
             ...toRefs(formInfo),
             errors,
-            currentUser
+            currentUser,
+            loggedIn,
+            authState
           };
         },
         methods: {
@@ -81,6 +75,7 @@
               password: this.password
             }).then(user => {
               this.currentUser = user?.data;
+              this.authState.$patch({ loggedIn: true });
               localStorage.setItem('auth', 'true');
               router.push({ name: 'home' });
             }).catch(err => {
