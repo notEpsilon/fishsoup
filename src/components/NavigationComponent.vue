@@ -52,6 +52,7 @@
     import User from "@/api/user";
     import router from "@/router/index";
     import { useAuthState } from "@/stores/auth-state";
+    import { useUserState } from "@/stores/user-state";
     import { storeToRefs } from "pinia";
 
     export default defineComponent({
@@ -71,10 +72,15 @@
             const authState = useAuthState();
             const { loggedIn } = storeToRefs(authState);
 
+            const userState = useUserState();
+            const { user } = storeToRefs(userState);
+
             return {
                 navigation,
                 loggedIn,
                 authState,
+                userState,
+                user,
                 notLoggedInLinks
             };
         },
@@ -83,6 +89,7 @@
             await User.logout();
             localStorage.removeItem('auth');
             this.authState.$patch({ loggedIn: false });
+            this.userState.setUser(null);
             router.push({ name: 'login' });
           }
         },

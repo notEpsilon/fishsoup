@@ -43,9 +43,9 @@
     import type LoginFormInfo from "@/types/LoginFormInfo";
     import User from "@/api/user";
     import router from "@/router/index";
-    import type IUser from "@/types/User"
     import { useAuthState } from "@/stores/auth-state";
     import { storeToRefs } from "pinia";
+    import { useUserState } from "@/stores/user-state";
     export default defineComponent({
         name: 'LoginComponent',
         components: {
@@ -57,13 +57,15 @@
             password: ''
           });
           let errors = ref<Record<string, string[]>>({});
-          let currentUser = ref<IUser>();
           const authState = useAuthState();
+          const userState = useUserState();
+          const { user } = storeToRefs(userState);
           const { loggedIn } = storeToRefs(authState);
           return {
             ...toRefs(formInfo),
             errors,
-            currentUser,
+            user,
+            userState,
             loggedIn,
             authState
           };
@@ -73,11 +75,11 @@
             User.login({
               email: this.email,
               password: this.password
-            }).then(user => {
-              this.currentUser = user?.data;
+            }).then(currUser => {
+              this.userState.setUser(currUser ? currUser.data : null);
               this.authState.$patch({ loggedIn: true });
               localStorage.setItem('auth', 'true');
-              router.push({ name: 'home' });
+              router.push({ name: 'dashboard' });
             }).catch(err => {
               if (err.response.status === 422) {
                 this.errors = err.response.data.errors;

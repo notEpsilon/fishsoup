@@ -21,6 +21,12 @@ const routes: Array<RouteRecordRaw> = [
     name: 'register',
     component: () => import(/* webpackChunkName: "register" */ '@/views/RegisterView.vue'),
     meta: { unAuthOnly: true }
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: () => import(/* webpackChunkName: "dashboard" */ '@/views/DashboardView.vue'),
+    meta: { authOnly: true }
   }
 ];
 
