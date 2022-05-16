@@ -79,6 +79,7 @@
               this.userState.setUser(currUser ? currUser.data : null);
               this.authState.$patch({ loggedIn: true });
               localStorage.setItem('auth', 'true');
+              localStorage.setItem('user', JSON.stringify(currUser.data));
               router.push({ name: 'dashboard' });
             }).catch(err => {
               if (err.response.status === 422) {

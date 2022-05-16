@@ -15,6 +15,7 @@ export default {
     },
 
     async logout() {
+        await CSRF.getCSRFToken();
         return API.post('/logout');
     },
 

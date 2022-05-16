@@ -86,6 +86,7 @@
           async logout() {
             await User.logout();
             localStorage.removeItem('auth');
+            localStorage.removeItem('user');
             this.authState.$patch({ loggedIn: false });
             this.userState.setUser(null);
             router.push({ name: 'login' });
