@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "start": "npx tsc server.ts && node server.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "@headlessui/vue": "^1.6.1",
