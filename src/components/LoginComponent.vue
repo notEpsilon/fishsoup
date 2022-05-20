@@ -7,7 +7,7 @@
         <p class="mt-2 text-center text-sm text-gray-600">
           Or
           {{ ' ' }}
-          <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500"> start your 14-day free trial </a>
+          <router-link to="/register" class="font-medium text-indigo-600 hover:text-indigo-500"> register a new account </router-link>
         </p>
       </div>
       <form @submit.prevent="login" class="mt-8 space-y-6" method="POST">
@@ -46,7 +46,7 @@
     import { useAuthState } from "@/stores/auth-state";
     import { storeToRefs } from "pinia";
     import { useUserState } from "@/stores/user-state";
-import { useNavlinksState } from "@/stores/navlinks-state";
+    import { useNavlinksState } from "@/stores/navlinks-state";
     export default defineComponent({
         name: 'LoginComponent',
         components: {
