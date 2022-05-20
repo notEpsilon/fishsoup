@@ -15,8 +15,8 @@
           </div>
           <div class="hidden sm:block sm:ml-6 sm:pt-1">
             <div class="flex space-x-4">
-              <router-link v-for="item in navigation" :key="item.name" :to="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</router-link>
-              <span v-if="!loggedIn" class="">
+              <router-link v-for="item in loggedInNavLinks" :key="item.name" :to="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</router-link>
+              <span v-if="!loggedIn">
                 <router-link v-for="item in notLoggedInLinks" :key="item.name" :to="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</router-link>
               </span>
               <form v-if="loggedIn" method="POST" @submit.prevent="logout">
@@ -30,7 +30,7 @@
 
     <disclosure-panel class="sm:hidden">
       <div class="px-2 pt-2 pb-3 space-y-1">
-        <disclosure-button v-for="item in navigation" :key="item.name" as="a" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</disclosure-button>
+        <disclosure-button v-for="item in loggedInNavLinks" :key="item.name" as="a" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</disclosure-button>
         <span v-if="!loggedIn">
           <disclosure-button v-for="item in notLoggedInLinks" :key="item.name" as="a" :href="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'block px-3 py-2 rounded-md text-base font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</disclosure-button>
         </span>
@@ -52,6 +52,7 @@
     import { useAuthState } from "@/stores/auth-state";
     import { useUserState } from "@/stores/user-state";
     import { storeToRefs } from "pinia";
+    import { useNavlinksState } from "@/stores/navlinks-state";
 
     export default defineComponent({
         setup() {
@@ -60,21 +61,18 @@
               { name: 'Register', href: '/register', current: false }
             ]);
 
-            const navigation = ref<Navlink[]>([
-                // { name: 'Dashboard', href: '/', current: true },
-                // { name: 'Login', href: '/login', current: false },
-                // { name: 'Register', href: '/register', current: false }
-                // { name: 'Calendar', href: '#', current: false },
-            ]);
-
             const authState = useAuthState();
             const { loggedIn } = storeToRefs(authState);
 
             const userState = useUserState();
             const { user } = storeToRefs(userState);
 
+            const navigation = useNavlinksState();
+            const { loggedInNavLinks } = storeToRefs(navigation);
+
             return {
                 navigation,
+                loggedInNavLinks,
                 loggedIn,
                 authState,
                 userState,
@@ -87,6 +85,7 @@
             await User.logout();
             localStorage.removeItem('auth');
             localStorage.removeItem('user');
+            this.navigation.setLinks([]);
             this.authState.$patch({ loggedIn: false });
             this.userState.setUser(null);
             router.push({ name: 'login' });

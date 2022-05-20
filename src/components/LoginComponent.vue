@@ -46,6 +46,7 @@
     import { useAuthState } from "@/stores/auth-state";
     import { storeToRefs } from "pinia";
     import { useUserState } from "@/stores/user-state";
+import { useNavlinksState } from "@/stores/navlinks-state";
     export default defineComponent({
         name: 'LoginComponent',
         components: {
@@ -56,18 +57,22 @@
             email: '',
             password: ''
           });
+
           let errors = ref<Record<string, string[]>>({});
           const authState = useAuthState();
           const userState = useUserState();
+          const navigation = useNavlinksState();
           const { user } = storeToRefs(userState);
           const { loggedIn } = storeToRefs(authState);
+
           return {
             ...toRefs(formInfo),
             errors,
             user,
             userState,
             loggedIn,
-            authState
+            authState,
+            navigation
           };
         },
         methods: {
@@ -80,6 +85,11 @@
               this.authState.$patch({ loggedIn: true });
               localStorage.setItem('auth', 'true');
               localStorage.setItem('user', JSON.stringify(currUser.data));
+              if (currUser.data.type === 0) {
+                this.navigation.setLinks([
+                  { name: 'Store', href: '/store' }
+                ]);
+              }
               router.push({ name: 'dashboard' });
             }).catch(err => {
               if (err.response.status === 422) {

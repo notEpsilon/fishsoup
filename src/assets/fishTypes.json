@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "fishName": "Catfish",
+        "fishImageLink": "https://cdn-fchae.nitrocdn.com/cQKnXzjGybEVSejWqcUjHabhzhfysXdH/assets/static/optimized/rev-b67f076/wp-content/uploads/2020/06/Fish-fillet.jpg",
+        "price": 10,
+        "amount": 9
+    },
+    {
+        "id": 2,
+        "fishName": "Mullet",
+        "fishImageLink": "https://www.naturalhealthmag.com.au/sites/default/files/imagecache/recipes-image/editorial/crispy-mullet-zucchini.jpg",
+        "price": 20,
+        "amount": 10
+    },
+    {
+        "id": 3,
+        "fishName": "Sea Bass",
+        "fishImageLink": "https://images.immediate.co.uk/production/volatile/sites/30/2013/05/sea-bass-ea84f07.jpg",
+        "price": 30,
+        "amount": 7
+    },
+    {
+        "id": 4,
+        "fishName": "Lobster",
+        "fishImageLink": "https://www.wholesomeyum.com/wp-content/uploads/2021/06/wholesomeyum-Grilled-Lobster-Tail-Recipe-28.jpg",
+        "price": 50,
+        "amount": 3
+    },
+    {
+        "id": 5,
+        "fishName": "Shrimp",
+        "fishImageLink": "https://www.thechunkychef.com/wp-content/uploads/2019/10/Spicy-Honey-Lime-Shrimp-Recipe-overheadclose.jpg",
+        "price": 40,
+        "amount": 13
+    }
+]

@@ -27,6 +27,18 @@ const routes: Array<RouteRecordRaw> = [
     name: 'dashboard',
     component: () => import(/* webpackChunkName: "dashboard" */ '@/views/DashboardView.vue'),
     meta: { authOnly: true }
+  },
+  {
+    path: '/store',
+    name: 'store',
+    component: () => import(/* webpackChunkName: "store" */ '@/views/StoreView.vue'),
+    meta: { authOnly: true }
+  },
+  {
+    path: '/store/:id',
+    name: 'order',
+    component: () => import(/* webpackChunkName: "order" */ '@/views/OrderView.vue'),
+    meta: { authOnly: true }
   }
 ];
 
