@@ -21,5 +21,13 @@ export default {
 
     getCurrentUser() {
         return API.get('/user');
+    },
+
+    getAllUsers() {
+        return API.get('/users');
+    },
+
+    promoteUser(id: number, level: number) {
+        return API.put(`/users/${id}`, { level });
     }
 };

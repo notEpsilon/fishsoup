@@ -12,5 +12,13 @@ export default {
 
     deleteOrder(id?: number) {
         return API.delete(`/orders/${id}`);
+    },
+
+    getFullOrders() {
+        return API.get('/orders');
+    },
+
+    markOrderAsDone(id?: number) {
+        return API.put(`/orders/${id}`);
     }
 };

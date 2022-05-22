@@ -13,11 +13,14 @@
                     <div class="text-gray-900 font-bold text-xl mb-2">{{ product?.name }}</div>
                     <p :class="`text-gray-700 text-base ${!ord.street_address && 'text-red-400'}`">{{ ord.street_address ? ord.street_address : "No Address Provided" }}</p>
                 </div>
-                <button v-if="ord.status === 1" @click="removeItem" class="rounded-md py-2 w-32 lg:w-36 bg--500 h-[2.32rem] bg-rose-600 text-white align-middle text-center text-sm">
+                <button v-if="ord.status === 1" @click="removeItem" class="rounded-md py-2 w-32 lg:w-36 bg--500 h-[2.32rem] bg-rose-600 text-white align-middle text-center text-sm" :class="worker ? 'bg-rose-400' : ''" :disabled="worker">
                     <span class="flex items-center justify-center">
                         <x-icon class="h-5" />
                         <span class="ml-[0.2rem] mr-1">Remove</span>
                     </span>
+                </button>
+                <button v-if="worker && ord.status !== 1" @click="markAsDone" class="rounded-md py-2 w-32 lg:w-36 bg--500 h-[2.32rem] bg-rose-600 hover:bg-rose-500 text-white align-middle text-center text-sm">
+                    Mark as Done
                 </button>
             </div>
             <div class="flex items-center justify-between">
@@ -46,6 +49,10 @@
             ord: {
                 required: true,
                 type: Object
+            },
+            worker: {
+                required: false,
+                type: Boolean
             }
         },
         setup(props) {
@@ -74,6 +81,10 @@
         methods: {
             removeItem() {
                 this.$emit('remove-item');
+            },
+
+            markAsDone() {
+                this.$emit('mark-as-done');
             }
         }
     });

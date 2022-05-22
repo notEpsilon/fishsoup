@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
             <!-- Replace with your content -->
             <div class="flex flex-col justify-center items-center space-y-4">
-                <!-- <render-order v-for="order in userOrders" :ord="order" @remove-item="deleteItem(order.id)" :key="order.id" /> -->
+                <render-user v-for="user in users" :user="user" @promote-event="promote" :key="user.id" />
             </div>
             <!-- /End replace -->
         </div>
@@ -18,12 +18,40 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent } from "vue";
+    import { defineComponent, onMounted, ref } from "vue";
+    import IUser from "@/types/User";
+    import RenderUser from "@/components/RenderUser.vue";
+    import userAPI from "@/api/user";
+
     export default defineComponent({
         name: 'GeneralManagerDashboard',
+        setup() {
+            const users = ref<IUser[]>([]);
 
-        // onMounted(() => {});
+            onMounted(() => {
+                userAPI.getAllUsers().then(res => {
+                    users.value = res.data;
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+            });
 
-
+            return {
+                users
+            }
+        },
+        components: {
+            RenderUser
+        },
+        methods: {
+            promote(payload: { id: number, level: number }) {
+                userAPI.promoteUser(payload.id, payload.level)
+                .then(async () => {
+                    this.users = (await userAPI.getAllUsers()).data;
+                })
+                .catch(err => console.log(err));
+            }
+        }
     });
 </script>
