@@ -7,11 +7,9 @@
         </header>
         <main>
         <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-            <!-- Replace with your content -->
             <div class="flex flex-col justify-center items-center space-y-4">
                 <render-order v-for="order in allOrders" :ord="order" @mark-as-done="markOrder(order.id)" :worker="true" :key="order.id" />
             </div>
-            <!-- /End replace -->
         </div>
         </main>
     </div>
@@ -22,11 +20,16 @@
     import orderAPI from "@/api/order";
     import Order from "@/types/Order";
     import RenderOrder from "./RenderOrder.vue";
+    import activityAPI from "@/api/activity";
+    import { useUserState } from "@/stores/user-state";
+    import { storeToRefs } from "pinia";
 
     export default defineComponent({
         name: 'WorkerDashboard',
         setup() {
             const allOrders = ref<Order[]>([]);
+            const userState = useUserState();
+            const { user } = storeToRefs(userState);
 
             onMounted(() => {
                 orderAPI.getFullOrders().then(res => {
@@ -36,7 +39,8 @@
             });
 
             return {
-                allOrders
+                allOrders,
+                user
             }
         },
         components: {
@@ -46,6 +50,10 @@
             markOrder(id?: number) {
                 orderAPI.markOrderAsDone(id).then(async () => {
                     this.allOrders = (await orderAPI.getFullOrders()).data;
+                }).catch(err => console.log(err));
+                activityAPI.addActivity({
+                    user_id: this.user?.id,
+                    description: 'Marked Order as Done'
                 }).catch(err => console.log(err));
             }
         }

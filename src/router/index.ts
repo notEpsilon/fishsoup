@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import HomeView from '@/views/HomeView.vue';
 
 const isLoggedIn = () => !!localStorage.getItem('auth');
@@ -39,11 +39,23 @@ const routes: Array<RouteRecordRaw> = [
     name: 'order',
     component: () => import(/* webpackChunkName: "order" */ '@/views/OrderView.vue'),
     meta: { authOnly: true }
+  },
+  {
+    path: '/dish',
+    name: 'add_dish',
+    component: () => import(/* webpackChunkName: "order" */ '@/views/AddDish.vue'),
+    meta: { authOnly: true }
+  },
+  {
+    path: '/checkout',
+    name: 'checkout',
+    component: () => import(/* webpackChunkName: "checkout" */ '@/views/CheckOut.vue'),
+    meta: { authOnly: true }
   }
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes
 });
 

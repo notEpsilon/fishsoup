@@ -42,6 +42,7 @@
                     </form>
                 </div>
             </div>
+            <p class="mt-5 text-gray-500">or just add it to cart: <button @click="addCartElement" class="ml-2 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Add to Cart</button></p>
         </div>
     </div>
 </template>
@@ -57,6 +58,9 @@
     import Product from "@/api/product";
     import router from "@/router";
     import orderAPI from "@/api/order";
+    import cartAPI from "@/api/cart";
+    import CartElement from "@/types/CartElement";
+    import useCartState from "@/stores/cart-state";
 
     export default defineComponent({
         name: 'OrderView',
@@ -68,6 +72,9 @@
 
             const userState = useUserState();
             const { user } = storeToRefs(userState);
+
+            const cartState = useCartState();
+            const { count } = storeToRefs(cartState);
 
             const formInfo =  reactive<IOrder>({
                 address: '',
@@ -92,7 +99,8 @@
                 ...toRefs(formInfo),
                 userState,
                 user,
-                errors
+                errors,
+                count
             };
         },
         methods: {
@@ -119,6 +127,21 @@
                                 this.errors = err.response.data.errors;
                             }
                         });
+            },
+            addCartElement() {
+                cartAPI.addCartElement({
+                    product_id: this.id,
+                    quantity: 1
+                }).then(async () => {
+                    const cartElements: CartElement[] = (await cartAPI.getAllCartElements()).data;
+                    let size = 0;
+                    cartElements.forEach(ce => {
+                        size += ce.quantity;
+                    });
+                    this.count = size;
+                    localStorage.setItem('cart-size', this.count >= 0 ? this.count.toString() : '0');
+
+                }).catch(err => console.log(err));
             }
         }
     });

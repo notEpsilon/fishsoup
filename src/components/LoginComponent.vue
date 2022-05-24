@@ -62,6 +62,7 @@
           const authState = useAuthState();
           const userState = useUserState();
           const navigation = useNavlinksState();
+          const { loggedInNavLinks } = storeToRefs(navigation);
           const { user } = storeToRefs(userState);
           const { loggedIn } = storeToRefs(authState);
 
@@ -72,7 +73,8 @@
             userState,
             loggedIn,
             authState,
-            navigation
+            navigation,
+            loggedInNavLinks
           };
         },
         methods: {
@@ -88,6 +90,11 @@
               if (currUser.data.type === 0) {
                 this.navigation.setLinks([
                   { name: 'Store', href: '/store' }
+                ]);
+              }
+              else if (currUser.data.type === 2) {
+                this.navigation.setLinks([
+                  { name: 'Add Dish', href: '/dish' }
                 ]);
               }
               router.push({ name: 'dashboard' });

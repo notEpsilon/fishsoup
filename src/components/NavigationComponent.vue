@@ -1,5 +1,6 @@
 <template>
   <Disclosure as="nav" class="bg-gray-800" v-slot="{ open }">
+    <shopping-cart />
     <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
       <div class="relative flex items-center justify-between h-16">
         <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -19,6 +20,7 @@
               <span v-if="!loggedIn">
                 <router-link v-for="item in notLoggedInLinks" :key="item.name" :to="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</router-link>
               </span>
+              <button @click="cartState.openCart" :after-content="count" class="after:absolute after:w-5 after:h-5 after:text-white after:bg-blue-400 after:top-4 after:ml-1 after:content-[attr(after-content)] after:rounded-full" :class="['text-gray-300 hover:bg-gray-700 hover:text-white', 'cursor-pointer', 'px-3 py-2 rounded-md text-sm font-medium']">Cart</button>
               <form v-if="loggedIn" method="POST" @submit.prevent="logout">
                 <button type="submit" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Logout</button>
               </form>
@@ -53,6 +55,8 @@
     import { useUserState } from "@/stores/user-state";
     import { storeToRefs } from "pinia";
     import { useNavlinksState } from "@/stores/navlinks-state";
+    import ShoppingCart from "./ShoppingCart.vue";
+    import useCartState from "@/stores/cart-state";
 
     export default defineComponent({
         setup() {
@@ -70,6 +74,9 @@
             const navigation = useNavlinksState();
             const { loggedInNavLinks } = storeToRefs(navigation);
 
+            const cartState = useCartState();
+            const { open, count } = storeToRefs(cartState);
+
             return {
                 navigation,
                 loggedInNavLinks,
@@ -77,7 +84,10 @@
                 authState,
                 userState,
                 user,
-                notLoggedInLinks
+                notLoggedInLinks,
+                open,
+                cartState,
+                count
             };
         },
         methods: {
@@ -92,11 +102,12 @@
           }
         },
         components: {
-            Disclosure,
-            DisclosureButton,
-            DisclosurePanel,
-            MenuIcon,
-            XIcon
+          Disclosure,
+          DisclosureButton,
+          DisclosurePanel,
+          ShoppingCart,
+          MenuIcon,
+          XIcon
         }
     });
 </script>

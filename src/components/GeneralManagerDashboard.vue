@@ -7,11 +7,9 @@
         </header>
         <main>
         <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-            <!-- Replace with your content -->
             <div class="flex flex-col justify-center items-center space-y-4">
                 <render-user v-for="user in users" :user="user" @promote-event="promote" :key="user.id" />
             </div>
-            <!-- /End replace -->
         </div>
         </main>
     </div>

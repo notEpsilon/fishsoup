@@ -29,5 +29,9 @@ export default {
 
     promoteUser(id: number, level: number) {
         return API.put(`/users/${id}`, { level });
+    },
+
+    getUserById(id: number) {
+        return API.get(`/users/${id}`);
     }
 };

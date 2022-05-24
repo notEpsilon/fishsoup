@@ -13,7 +13,7 @@
                     <div class="text-gray-900 font-bold text-xl mb-2">{{ product?.name }}</div>
                     <p :class="`text-gray-700 text-base ${!ord.street_address && 'text-red-400'}`">{{ ord.street_address ? ord.street_address : "No Address Provided" }}</p>
                 </div>
-                <button v-if="ord.status === 1" @click="removeItem" class="rounded-md py-2 w-32 lg:w-36 bg--500 h-[2.32rem] bg-rose-600 text-white align-middle text-center text-sm" :class="worker ? 'bg-rose-400' : ''" :disabled="worker">
+                <button v-if="ord.status === 1" @click="removeItem" class="rounded-md py-2 w-32 lg:w-36 bg--500 h-[2.32rem] bg-rose-600 hover:bg-rose-500 text-white align-middle text-center text-sm" :class="worker ? 'bg-rose-400' : ''" :disabled="worker">
                     <span class="flex items-center justify-center">
                         <x-icon class="h-5" />
                         <span class="ml-[0.2rem] mr-1">Remove</span>
@@ -25,7 +25,7 @@
             </div>
             <div class="flex items-center justify-between">
                 <div class="text-sm">
-                    <p class="text-gray-900 leading-none">Ordered by: {{ user?.name }}</p>
+                    <p class="text-gray-900 leading-none">Ordered by: {{ userOrdered?.name }}</p>
                     <p class="text-gray-600">Ordered on: {{  new Date(ord.created_at).toDateString() }}</p>
                 </div>
                 <badge-component :text="ord.status === 0 ? 'In Progress' : 'Done'" :done="ord.status === 0 ? false : true" />
@@ -42,6 +42,8 @@
     import { storeToRefs } from "pinia";
     import BadgeComponent from "./BadgeComponent.vue";
     import { XIcon } from "@heroicons/vue/outline";
+    import type IUser from "@/types/User";
+    import userAPI from "@/api/user";
 
     export default defineComponent({
         name: 'RenderOrder',
@@ -61,17 +63,26 @@
             const userState = useUserState();
             const { user } = storeToRefs(userState);
 
+            const userOrdered = ref<IUser>();
+
             onMounted(() => {
                 productAPI.getSingleProduct(props.ord.product_id)
                           .then(res => {
                               product.value = res.data;
                           })
                           .catch(err => console.log(err));
+
+                userAPI.getUserById(props.ord.user_id)
+                       .then(res => {
+                           userOrdered.value = res.data;
+                       })
+                       .catch(err => console.log(err));
             });
 
             return {
                 product,
-                user
+                user,
+                userOrdered
             }
         },
         components: {
@@ -80,6 +91,8 @@
         },
         methods: {
             removeItem() {
+                const ok = window.confirm('Are You Sure ?');
+                if (!ok) return;
                 this.$emit('remove-item');
             },
 

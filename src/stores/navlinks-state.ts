@@ -18,6 +18,9 @@ export const useNavlinksState = defineStore<string, State, Getters>('navlinks-st
             if (type === 0) {
                 currentLinks.push({ name: 'Store', href: '/store' });
             }
+            else if (type === 2) {
+                currentLinks.push({ name: 'Add Dish', href: '/dish' });
+            }
         }
 
         return {
