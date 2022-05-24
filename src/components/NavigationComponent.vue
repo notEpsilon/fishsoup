@@ -15,7 +15,7 @@
             <router-link to="/"><img class="block h-8 w-auto" src="@/assets/logo.svg" alt="Fishsoup" /></router-link>
           </div>
           <div class="hidden sm:block sm:ml-6 sm:pt-1">
-            <div class="flex space-x-4">
+            <div class="flex items-center space-x-4">
               <router-link v-for="item in loggedInNavLinks" :key="item.name" :to="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</router-link>
               <span v-if="!loggedIn">
                 <router-link v-for="item in notLoggedInLinks" :key="item.name" :to="item.href" :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'px-3 py-2 rounded-md text-sm font-medium']" :aria-current="item.current ? 'page' : undefined">{{ item.name }}</router-link>
