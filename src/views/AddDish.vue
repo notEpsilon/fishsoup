@@ -2,11 +2,12 @@
     <div>
         <div class="max-w-7xl mx-auto mt-10 px-4 sm:mt-0 sm:p-4 sm:pt-24">
             <div class="md:grid md:grid-cols-1 md:gap-6">
-                <div class="md:col-span-1">
+                <div class="flex items-center justify-between md:col-span-1">
                     <div class="px-4 sm:px-0">
                         <h3 class="text-3xl mb-3 font-medium leading-6 text-gray-900">Dish Information</h3>
                         <p class="mt-1 text-sm text-gray-600">Enter New Dish Information</p>
                     </div>
+                    <span class="text-base">Dashboard > Add / Modify Dish</span>
                 </div>
                 <div class="mt-5 md:mt-0 md:col-span-2">
                     <form @submit.prevent="addDish" method="POST">
@@ -27,8 +28,8 @@
 
                                     <div class="col-span-6 sm:col-span-3 lg:col-span-2">
                                         <span v-if="Object.keys(errors).length !== 0 && errors.price && errors.price.length !== 0" class="text-red-500">{{ errors.price[0] }}</span>
-                                        <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
-                                        <input v-model="price" type="number" name="price" id="price" required autocomplete="price1" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+                                        <label for="price" class="block text-sm font-medium text-gray-700">Price (2 decimal places at most, ex: 10.85)</label>
+                                        <input v-model="price" type="number" step="0.01" name="price" id="price" required autocomplete="price1" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-3 lg:col-span-2">

@@ -2,7 +2,7 @@
     <div class="customer-dashboard">
         <header class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
+                <h1 class="flex items-center justify-between text-3xl font-bold text-gray-900"><span>Dashboard</span> <span class="text-base">Dashboard > {{ route.path.substring(1, route.path.length) }}</span></h1>
             </div>
         </header>
         <main>
@@ -20,11 +20,14 @@
     import RenderCheckout from "@/components/RenderCheckout.vue";
     import CartElement from "@/types/CartElement";
     import cartAPI from "@/api/cart";
+    import { useRoute } from "vue-router";
 
     export default defineComponent({
         name: 'CheckOut',
         setup() {
             const cartElements = ref<CartElement[]>([]);
+
+            const route = useRoute();
 
             onMounted(() => {
                 cartAPI.getAllCartElements().then(res => {
@@ -33,7 +36,8 @@
             });
 
             return {
-                cartElements
+                cartElements,
+                route
             }
         },
         components: {

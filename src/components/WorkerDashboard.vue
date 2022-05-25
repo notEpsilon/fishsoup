@@ -2,7 +2,7 @@
     <div class="customer-dashboard">
         <header class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-bold text-gray-900">Dashboard</h1>
+                <h1 class="flex items-center justify-between text-3xl font-bold text-gray-900"><span>Welcome Worker {{ user?.name }}, Dashboard</span> <span class="text-base">{{ route.path.substring(1, route.path.length) }}</span></h1>
             </div>
         </header>
         <main>
@@ -23,6 +23,7 @@
     import activityAPI from "@/api/activity";
     import { useUserState } from "@/stores/user-state";
     import { storeToRefs } from "pinia";
+    import { useRoute } from "vue-router";
 
     export default defineComponent({
         name: 'WorkerDashboard',
@@ -30,6 +31,8 @@
             const allOrders = ref<Order[]>([]);
             const userState = useUserState();
             const { user } = storeToRefs(userState);
+
+            const route = useRoute();
 
             onMounted(() => {
                 orderAPI.getFullOrders().then(res => {
@@ -40,6 +43,7 @@
 
             return {
                 allOrders,
+                route,
                 user
             }
         },

@@ -13,8 +13,9 @@
                         <a target="_blank" href="https://github.com/notEpsilon/fishsoup" class="text-white bg-slate-900 rounded-md shadow px-10 py-3 hover:bg-gray-800">Github</a>
                     </div>
                 </div>
-                <div class="flex-1 overflow-hidden flex items-center justify-center">
-                    <img class="h-full max-h-full max-w-full object-contain sm:-mt-8 sm:ml-28" src="@/assets/undraw_fish_bowl_uu88.svg" alt="fish" />
+                <div class="flex-1 overflow-hidden flex p-4 sm:ml-8 items-center justify-center">
+                    <!-- <img class="h-full max-h-full max-w-full object-contain sm:-mt-8 sm:ml-28" src="@/assets/undraw_fish_bowl_uu88.svg" alt="fish" /> -->
+                    <carousel-component :imgs="prods.map(prod => prod.image_link)" />
                 </div>
             </div>
         </div>
@@ -22,8 +23,30 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent } from "vue";
+    import { defineComponent, onMounted, ref } from "vue";
+    import CarouselComponent from "@/components/CarouselComponent.vue";
+    import productAPI from "@/api/product";
+    import IProduct from "@/types/Product";
+
     export default defineComponent({
         name: 'HomeView',
+        setup() {
+            const prods = ref<IProduct[]>([]);
+
+            onMounted(async () => {
+                try {
+                    prods.value = (await productAPI.getAllProducts()).data as Array<IProduct>;
+                } catch (err) {
+                    console.log(err);
+                }
+            });
+
+            return {
+                prods
+            };
+        },
+        components: {
+            CarouselComponent
+        }
     });
 </script>

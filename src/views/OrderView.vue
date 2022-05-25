@@ -2,11 +2,12 @@
     <div>
         <div class="max-w-7xl mx-auto mt-10 px-4 sm:mt-0 sm:p-4 sm:pt-24">
             <div class="md:grid md:grid-cols-1 md:gap-6">
-                <div class="md:col-span-1">
+                <div class="flex items-center justify-between md:col-span-1">
                     <div class="px-4 sm:px-0">
-                        <h3 class="text-3xl mb-3 font-medium leading-6 text-gray-900">Personal Information</h3>
+                        <h3 class="text-3xl mb-3 font-medium leading-6 text-gray-900">Personal Information <span class="text-base ml-1 text-rose-700">(<span class="underline">Ordering {{ product?.name }}</span>)</span></h3>
                         <p class="mt-1 text-sm text-gray-600">We will never share your personal information.</p>
                     </div>
+                    <span>Dashboard > Store > {{ product?.name }}</span>
                 </div>
                 <div class="mt-5 md:mt-0 md:col-span-2">
                     <form @submit.prevent="placeOrder" method="POST">
@@ -100,7 +101,8 @@
                 userState,
                 user,
                 errors,
-                count
+                count,
+                route
             };
         },
         methods: {

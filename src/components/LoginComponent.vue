@@ -92,9 +92,9 @@
                   { name: 'Store', href: '/store' }
                 ]);
               }
-              else if (currUser.data.type === 2) {
+              else if (currUser.data.type === 2 || currUser.data.type === 3) {
                 this.navigation.setLinks([
-                  { name: 'Add Dish', href: '/dish' }
+                  { name: 'Add / Update Dish', href: '/dish' }
                 ]);
               }
               router.push({ name: 'dashboard' });
