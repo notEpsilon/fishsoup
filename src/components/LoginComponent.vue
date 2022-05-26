@@ -47,6 +47,8 @@
     import { storeToRefs } from "pinia";
     import { useUserState } from "@/stores/user-state";
     import { useNavlinksState } from "@/stores/navlinks-state";
+    import useCartState from "@/stores/cart-state";
+
     export default defineComponent({
         name: 'LoginComponent',
         components: {
@@ -59,12 +61,15 @@
           });
 
           let errors = ref<Record<string, string[]>>({});
+
           const authState = useAuthState();
           const userState = useUserState();
+          const cartState = useCartState();
           const navigation = useNavlinksState();
-          const { loggedInNavLinks } = storeToRefs(navigation);
           const { user } = storeToRefs(userState);
+          const { content } = storeToRefs(cartState);
           const { loggedIn } = storeToRefs(authState);
+          const { loggedInNavLinks } = storeToRefs(navigation);
 
           return {
             ...toRefs(formInfo),
@@ -74,7 +79,9 @@
             loggedIn,
             authState,
             navigation,
-            loggedInNavLinks
+            loggedInNavLinks,
+            content,
+            cartState
           };
         },
         methods: {
@@ -87,6 +94,7 @@
               this.authState.$patch({ loggedIn: true });
               localStorage.setItem('auth', 'true');
               localStorage.setItem('user', JSON.stringify(currUser.data));
+              this.cartState.updateCart(currUser.data.id);
               if (currUser.data.type === 0) {
                 this.navigation.setLinks([
                   { name: 'Store', href: '/store' }

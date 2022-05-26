@@ -6,8 +6,8 @@ export default {
         return API.post('/cart', info);
     },
 
-    getAllCartElements() {
-        return API.get('/cart');
+    getAllCartElements(id?: number) {
+        return API.get(`/cart/${id}`);
     },
 
     removeItem(id?: number) {

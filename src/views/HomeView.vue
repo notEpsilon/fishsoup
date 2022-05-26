@@ -7,14 +7,15 @@
                         <span class="text-indigo-600">World-Class</span>
                         Seafood Restaurant
                     </h1>
-                    <p class="text-base mt-5 mb-12 text-gray-600">Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia libero similique minima in ipsum, suscipit dolorum assumenda earum id pariatur reiciendis asperiores, iusto accusantium dolorem.</p>
+                    <p class="text-base mt-5 mb-12 text-gray-600">
+                        minimalist administration system for restaurants and fish markets to deliver the best experience, convenience and speed for users.
+                    </p>
                     <div class="buttons space-x-4">
                         <router-link to="/register" class="bg-indigo-400 rounded-md shadow px-5 py-3 hover:bg-indigo-500">Get Started</router-link>
-                        <a target="_blank" href="https://github.com/notEpsilon/fishsoup" class="text-white bg-slate-900 rounded-md shadow px-10 py-3 hover:bg-gray-800">Github</a>
+                        <router-link to="/contact" class="text-white bg-slate-900 rounded-md shadow px-10 py-3 hover:bg-gray-800">Contact Us</router-link>
                     </div>
                 </div>
                 <div class="flex-1 overflow-hidden flex p-4 sm:ml-8 items-center justify-center">
-                    <!-- <img class="h-full max-h-full max-w-full object-contain sm:-mt-8 sm:ml-28" src="@/assets/undraw_fish_bowl_uu88.svg" alt="fish" /> -->
                     <carousel-component :imgs="prods.map(prod => prod.image_link)" />
                 </div>
             </div>

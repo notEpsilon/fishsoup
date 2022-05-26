@@ -51,6 +51,18 @@ const routes: Array<RouteRecordRaw> = [
     name: 'checkout',
     component: () => import(/* webpackChunkName: "checkout" */ '@/views/CheckOut.vue'),
     meta: { authOnly: true }
+  },
+  {
+    path: '/finalize',
+    name: 'mainStore',
+    component: () => import(/* webpackChunkName: "mainStore" */ '@/views/MainStore.vue'),
+    meta: { authOnly: true }
+  },
+  {
+    path: '/contact',
+    name: 'contact',
+    component: () => import(/* webpackChunkName: "mainStore" */ '@/views/ContactView.vue'),
+    meta: { unAuthOnly: true }
   }
 ];
 

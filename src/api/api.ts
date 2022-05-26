@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: 'https://fishsoupapp.herokuapp.com/api/' // http://localhost:8000/api , https://fishsoupapp.herokuapp.com/api/
+    baseURL: 'http://localhost:8000/api' // http://localhost:8000/api , https://fishsoupapp.herokuapp.com/api/
 });
 
 API.defaults.withCredentials = true;

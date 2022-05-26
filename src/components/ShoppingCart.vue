@@ -25,9 +25,9 @@
                     <div class="mt-8">
                       <div class="flow-root">
                         <ul role="list" class="-my-6 divide-y divide-gray-200">
-                          <li v-for="(product, idx) in products" :key="idx" class="flex py-6">
+                          <li v-for="(product, idx) in prods" :key="idx" class="flex py-6">
                             <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                              <img :src="product.imageSrc" :alt="product.imageAlt" class="h-full w-full object-cover object-center" />
+                              <img :src="product.image_link" :alt="product.name" class="h-full w-full object-cover object-center" />
                             </div>
 
                             <div class="ml-4 flex flex-1 flex-col">
@@ -38,13 +38,13 @@
                                   </h3>
                                   <p class="ml-4">{{ product.price }}$</p>
                                 </div>
-                                <p class="mt-1 text-sm text-gray-500">{{ product.desc }}</p>
+                                <p class="mt-1 text-sm text-gray-500">Seafood</p>
                               </div>
                               <div class="flex flex-1 items-end justify-between text-sm">
-                                <p class="text-gray-500">Qty {{ product.quantity }}</p>
+                                <p class="text-gray-500">Qty {{ product.quant }}</p>
 
                                 <div class="flex">
-                                  <button @click="remItem(product.id)" type="button" class="font-medium text-indigo-600 hover:text-indigo-500">Remove</button>
+                                  <button @click="remItem(product.elem_id)" type="button" class="font-medium text-indigo-600 hover:text-indigo-500">Remove</button>
                                 </div>
                               </div>
                             </div>
@@ -57,11 +57,11 @@
                   <div class="border-t border-gray-200 py-6 px-4 sm:px-6">
                     <div class="flex justify-between text-base font-medium text-gray-900">
                       <p>Subtotal</p>
-                      <p>total: {{ products.reduce((prev, curr) => prev + curr.price, 0) }}$</p>
+                      <p>{{ prods.map(prd => prd.quant * prd.price).reduce((prv, cur) => prv + cur, 0) }}$</p>
                     </div>
                     <p class="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                     <div class="mt-6">
-                      <router-link to="/checkout" class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700">Checkout</router-link>
+                      <router-link @click="cartState.closeCart" to="/checkout" class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700">Checkout</router-link>
                     </div>
                     <div class="mt-6 flex justify-center text-center text-sm text-gray-500">
                       <p>
@@ -80,51 +80,42 @@
 </template>
 
 <script lang="ts">
-    import { defineComponent, onMounted, ref } from "vue";
+    import { computed, defineComponent } from "vue";
     import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from "@headlessui/vue";
     import { XIcon } from "@heroicons/vue/outline";
     import useCartState from "@/stores/cart-state";
     import { storeToRefs } from "pinia";
-    import type ICartProduct from "@/types/CartProduct";
-    import cartAPI from "@/api/cart";
     import type ICartElement from "@/types/CartElement";
     import productAPI from "@/api/product";
     import Product from "@/types/Product";
+    import cartAPI from "@/api/cart";
+    import { useUserState } from "@/stores/user-state";
 
     export default defineComponent({
         name: 'ShoppingCart',
         setup() {
             const cartState = useCartState();
-            const { open } = storeToRefs(cartState);
+            const { open, content } = storeToRefs(cartState);
 
-            const productsBefore = ref<ICartElement[]>([]);
-            const products = ref<ICartProduct[]>([]);
+            const userState = useUserState();
+            const { user } = storeToRefs(userState);
 
-            onMounted(() => {
-              cartAPI.getAllCartElements().then(res => {
-                productsBefore.value = res.data;
-                const prds: ICartProduct[] = [];
-                (res.data as Array<ICartElement>).forEach(async cartElem => {
-                  const quant = cartElem.quantity;
-                  const assocProduct = (await productAPI.getSingleProduct(cartElem.product_id)).data as Product;
-                  prds.push({
-                    id: cartElem.id,
-                    name: assocProduct.name,
-                    quantity: quant,
-                    desc: 'Seafood',
-                    price: assocProduct.price * quant,
-                    imageSrc: assocProduct.image_link,
-                    imageAlt: 'product_image'
-                  });
-                });
-                products.value = prds;
-              }).catch(err => console.log(err));
+            const prods = computed<Array<Product & { quant: number, elem_id: number }>>(() => {
+              const res: Array<Product & { quant: number, elem_id: number }> = [];
+              (content.value as ICartElement[]).forEach((elem: ICartElement) => {
+                productAPI.getSingleProduct(elem.product_id).then(pr => {
+                  res.push({ ...(pr.data), quant: elem.quantity, elem_id: elem.id });
+                }).catch(err => console.log(err));
+              });
+              return res;
             });
 
             return {
                 open,
-                products,
-                cartState
+                prods,
+                cartState,
+                content,
+                user
             };
         },
         components: {
@@ -137,24 +128,9 @@
         },
         methods: {
           remItem(id?: number) {
+            console.log(id);
             cartAPI.removeItem(id).then(async () => {
-              localStorage.setItem('cart-size', (parseInt(localStorage.getItem('cart-size') || '0') - 1).toString());
-              cartAPI.getAllCartElements().then(res => {
-                const prds: ICartProduct[] = [];
-                (res.data as Array<ICartElement>).forEach(async cartElem => {
-                  const quant = cartElem.quantity;
-                  const assocProduct = (await productAPI.getSingleProduct(cartElem.product_id)).data as Product;
-                  prds.push({
-                    name: assocProduct.name,
-                    quantity: quant,
-                    desc: 'Seafood',
-                    price: assocProduct.price * quant,
-                    imageSrc: assocProduct.image_link,
-                    imageAlt: 'product_image'
-                  });
-                });
-                this.products = prds;
-              }).catch(err => console.log(err));
+              this.cartState.updateCart(this.user?.id);
             }).catch(err => console.log(err));
           }
         }

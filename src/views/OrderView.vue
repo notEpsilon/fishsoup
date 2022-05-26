@@ -60,7 +60,6 @@
     import router from "@/router";
     import orderAPI from "@/api/order";
     import cartAPI from "@/api/cart";
-    import CartElement from "@/types/CartElement";
     import useCartState from "@/stores/cart-state";
 
     export default defineComponent({
@@ -75,7 +74,7 @@
             const { user } = storeToRefs(userState);
 
             const cartState = useCartState();
-            const { count } = storeToRefs(cartState);
+            const { content } = storeToRefs(cartState);
 
             const formInfo =  reactive<IOrder>({
                 address: '',
@@ -101,8 +100,9 @@
                 userState,
                 user,
                 errors,
-                count,
-                route
+                route,
+                cartState,
+                content
             };
         },
         methods: {
@@ -122,6 +122,7 @@
 
                 orderAPI.createOrder(order)
                         .then(() => {
+                            alert('Successfully Placed Order!');
                             router.push({ name: 'dashboard' });
                         })
                         .catch(err => {
@@ -132,17 +133,13 @@
             },
             addCartElement() {
                 cartAPI.addCartElement({
+                    user_id: this.user?.id,
                     product_id: this.id,
                     quantity: 1
                 }).then(async () => {
-                    const cartElements: CartElement[] = (await cartAPI.getAllCartElements()).data;
-                    let size = 0;
-                    cartElements.forEach(ce => {
-                        size += ce.quantity;
-                    });
-                    this.count = size;
-                    localStorage.setItem('cart-size', this.count >= 0 ? this.count.toString() : '0');
-
+                    try {
+                        await this.cartState.updateCart(this.user?.id);
+                    } catch (e) { console.log(e); }
                 }).catch(err => console.log(err));
             }
         }
