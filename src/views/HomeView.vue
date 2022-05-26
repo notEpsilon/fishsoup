@@ -5,7 +5,7 @@
                 <div class="flex-1 text-center pt-4 sm:pt-36 sm:text-left">
                     <h1 class="text-5xl tracking-wide font-extrabold">
                         <span class="text-indigo-600">World-Class</span>
-                        Seafood Restraunt
+                        Seafood Restaurant
                     </h1>
                     <p class="text-base mt-5 mb-12 text-gray-600">Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia libero similique minima in ipsum, suscipit dolorum assumenda earum id pariatur reiciendis asperiores, iusto accusantium dolorem.</p>
                     <div class="buttons space-x-4">
