@@ -58,7 +58,6 @@
     import orderAPI from "@/api/order";
     import { useUserState } from "@/stores/user-state";
     import { storeToRefs } from "pinia";
-    import router from "@/router";
 
     export default defineComponent({
         name: 'MainStore',

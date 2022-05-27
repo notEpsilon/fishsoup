@@ -21,7 +21,7 @@
 
                                     <div class="col-span-6 sm:col-span-6 lg:col-span-2">
                                         <label for="city" class="block text-sm font-medium text-gray-700">City</label>
-                                        <select v-model="city" type="text" name="city" id="city" autocomplete="city1" required class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                        <select v-model="city" name="city" id="city" autocomplete="city1" required class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
                                             <option value="Alexandria">Alexandria</option>
                                             <option value="Cairo">Cairo</option>
                                             <option value="Giza">Giza</option>
