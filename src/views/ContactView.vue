@@ -7,9 +7,10 @@
         </header>
         <main>
         <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 space-y-3">
-            <p>Emai: <a href="#" class="text-blue-400">contact@email.com</a></p>
+            <p>Email: <a href="#" class="text-blue-400">contact@email.com</a></p>
             <p>Facebook: <a href="#" class="text-blue-400">facebook.com/FoodRes</a></p>
             <p>Company: <a href="#" class="text-blue-400">contact@fishsoupfrontend.com</a></p>
+            <p>Contact Number: 19999</p>
         </div>
         </main>
     </div>

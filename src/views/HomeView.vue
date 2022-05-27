@@ -8,7 +8,7 @@
                         Seafood Restaurant
                     </h1>
                     <p class="text-base mt-5 mb-12 text-gray-600">
-                        minimalist administration system for restaurants and fish markets to deliver the best experience, convenience and speed for users.
+                        Minimalist administration system for restaurants and fish markets to deliver the best experience, convenience and speed for users.
                     </p>
                     <div class="buttons space-x-4">
                         <router-link to="/register" class="bg-indigo-400 rounded-md shadow px-5 py-3 hover:bg-indigo-500">Get Started</router-link>
