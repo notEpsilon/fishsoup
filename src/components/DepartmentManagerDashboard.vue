@@ -2,7 +2,7 @@
     <div class="customer-dashboard">
         <header class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                <h1 class="flex items-cetner justify-between text-3xl font-bold text-gray-900"><span>Welcome Manager {{ user?.name }}, Worker Activity</span><span class="text-base pt-2">{{ route.path.substring(1, route.path.length) }}</span></h1>
+                <h1 class="flex items-cetner justify-between text-3xl font-bold text-gray-900"><span>welcome manager {{ user?.name }}, worker activity</span><span class="text-base pt-2">{{ route.path.substring(1, route.path.length).toLowerCase() }}</span></h1>
             </div>
         </header>
         <main>
